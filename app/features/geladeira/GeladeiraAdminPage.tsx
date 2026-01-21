@@ -67,6 +67,7 @@ export function GeladeiraAdminPage() {
 
 	const [newForSale, setNewForSale] = useState(false);
 	const [editingItem, setEditingItem] = useState<EditingItem>(null)
+	const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
 	useEffect(() => {
 		if (!actionData) return;
@@ -391,7 +392,7 @@ export function GeladeiraAdminPage() {
 											<button
 												type="button"
 												className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-[#FFF129] p-3 shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px w-12 h-12"
-												onClick={() =>
+												onClick={() =>{
 													setEditingItem({
 														id: item.id,
 														name: item.name,
@@ -399,7 +400,8 @@ export function GeladeiraAdminPage() {
 														forSale: item.forSale,
 														priceCents: item.priceCents,
 													})
-												}
+													setIsEditModalOpen(true)
+												}}
 											>
 												<PencilIcon className="h-5 w-5" weight="bold" />
 											</button>
@@ -417,14 +419,12 @@ export function GeladeiraAdminPage() {
 									</li>
 								))}
 							</ul>
-							{editingItem && (
-								<GeladeiraEditModal
-									open
-									fridgeId={data.selectedFridgeId}
-									item={editingItem}
-									onClose={() => setEditingItem(null)}
-								/>
-							)}
+							<GeladeiraEditModal
+								open={isEditModalOpen}
+								fridgeId={data.selectedFridgeId}
+								item={editingItem}
+								onClose={() => setIsEditModalOpen(false)}
+							/>
 						</>
 					)}
 				</div>
