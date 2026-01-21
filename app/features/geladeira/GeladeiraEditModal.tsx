@@ -53,22 +53,25 @@ export function GeladeiraEditModal ({ open, item, onClose, fridgeId } : TypeGela
                   type="number"
                   min={0}
                   defaultValue={item.quantity}
-                  className="h-11 w-full rounded-lg border-2 border-black px-3 font-bold shadow-[2px_2px_0_#000000]"
+                  className="h-11 w-full rounded-lg border-2 border-black px-3 font-bold shadow-[2px_2px_0_#000000] appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
               </div>
 
               <div>
                 <label className="block mb-1 font-bold">Valor</label>
-                <input
-                  name="price"
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  defaultValue={
-                    item.priceCents == null ? '' : (item.priceCents / 100).toFixed(2)
-                  }
-                  className="h-11 w-full rounded-lg border-2 border-black px-3 font-bold text-right shadow-[2px_2px_0_#000000]"
-                />
+                <div className="relative">
+                  <span className="absolute top-1/2 -translate-y-1/2 left-2.5 text-black font-bold">R$</span>
+                  <input
+                    name="price"
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    defaultValue={
+                      item.priceCents == null ? '' : (item.priceCents / 100).toFixed(2)
+                    }
+                    className="h-11 w-full rounded-lg border-2 border-black pl-6 pr-3 font-bold text-right shadow-[2px_2px_0_#000000] appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                </div>
               </div>
             </div>
             <label className="flex items-center justify-between gap-3 rounded-lg border-2 border-black bg-white px-4 py-3 shadow-[2px_2px_0_#000000]">
