@@ -6,3 +6,9 @@ node_modules
 /build/
 links.db
 links.json
+figma*
+
+# Geladeira (config/dados do servidor)
+config/geladeira.json
+data/geladeira/
+data/geladeira/**

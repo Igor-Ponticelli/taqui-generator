@@ -1,0 +1,16 @@
+{
+  "fridges": [
+    { "id": "1", "name": "Geladeira Desenvolvimento" },
+    { "id": "2", "name": "Geladeira teste" }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "displayName": "dev",
+      "username": "desenvolvimento",
+      "password": "123456789",
+      "pixKey": "umpixai",
+      "fridgeIds": ["1", "2"]
+    }
+  ]
+}
