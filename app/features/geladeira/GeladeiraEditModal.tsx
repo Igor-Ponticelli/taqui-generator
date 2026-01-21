@@ -1,6 +1,7 @@
 import { MoneyIcon } from "@phosphor-icons/react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Form } from "react-router"
+import { useLockBodyScroll } from "~/hooks/useLockBodyScroll"
 
 type TypeGeladeiraEditModal = {
   open: boolean
@@ -17,6 +18,9 @@ type TypeGeladeiraEditModal = {
 
 
 export function GeladeiraEditModal ({ open, item, onClose, fridgeId } : TypeGeladeiraEditModal) {
+
+  useLockBodyScroll(open)
+
   return (
     <AnimatePresence>
       {open && item && (
