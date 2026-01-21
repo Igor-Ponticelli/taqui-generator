@@ -33,7 +33,7 @@ export function GeladeiraEditModal ({ open, item, onClose, fridgeId } : TypeGela
             onClick={onClose}
           />
           <motion.div
-            className="fixed z-20 top-1/2 left-1/2 w-xl -translate-x-1/2 -translate-y-1/2 rounded-lg border-2 border-black bg-white p-10 shadow-[4px_4px_0_#000000] space-y-4"
+            className="fixed z-20 top-1/2 lg:left-1/2 left-0 w-[calc(100%-32px)] mx-4 lg:w-xl lg:-translate-x-1/2 -translate-y-1/2 rounded-lg border-2 border-black bg-white p-10 shadow-[4px_4px_0_#000000] space-y-4"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}

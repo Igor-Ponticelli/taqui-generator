@@ -388,7 +388,7 @@ export function GeladeiraAdminPage() {
 												<p className="text-left text-sm leading-5 text-black/70">Qtd: {item.quantity}</p>
 											</div>
 										</div>
-										<div className="flex flex-row gap-3">
+										<div className="flex flex-row gap-3 justify-end">
 											<button
 												type="button"
 												className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-[#FFF129] p-3 shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px w-12 h-12"
@@ -410,7 +410,7 @@ export function GeladeiraAdminPage() {
 												<input type="hidden" name="itemId" value={item.id} />
 													<button
 														type="submit"
-														className="inline-flex items-center justify-center mt-1 rounded-lg border-2 border-black bg-white p-3 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px sm:mt-0 w-12 h-12"
+														className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-white p-3 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px w-12 h-12"
 													>
 													<TrashIcon className="h-5 w-5" weight="bold" />
 												</button>
