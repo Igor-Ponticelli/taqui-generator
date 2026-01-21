@@ -11,10 +11,12 @@ import {
 	StorefrontIcon,
 	TrashIcon,
 	UserIcon,
+	PencilIcon,
 } from "@phosphor-icons/react";
 import { Form, Link, useActionData, useLoaderData, useSearchParams } from "react-router";
 import { PageShell } from "../../components/PageShell";
 import { taquiToastPresets, useToast } from "../../components/Toast";
+import { GeladeiraEditModal } from "./GeladeiraEditModal";
 
 type AdminItem = {
 	id: string;
@@ -42,6 +44,14 @@ type ActionData =
 	| { ok: true; message: string }
 	| { ok: false; error: string };
 
+type EditingItem = {
+  id: string
+  name: string
+  quantity: number
+  forSale: boolean
+  priceCents: number | null
+} | null
+
 function formatMoney(priceCents: number) {
 	return (priceCents / 100).toLocaleString("pt-BR", {
 		style: "currency",
@@ -56,10 +66,12 @@ export function GeladeiraAdminPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 
 	const [newForSale, setNewForSale] = useState(false);
+	const [editingItem, setEditingItem] = useState<EditingItem>(null)
 
 	useEffect(() => {
 		if (!actionData) return;
 		if (actionData.ok) {
+			setEditingItem(null)
 			toast({
 				...taquiToastPresets.success,
 				title: "TÁQUI!",
@@ -105,7 +117,7 @@ export function GeladeiraAdminPage() {
 	return (
 		<PageShell showLogo containerClassName="max-w-[1200px] gap-12">
 			<div className="flex w-full flex-col items-center gap-6">
-				<div className="w-full max-w-[700px] rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
+				<div className="w-full max-w-175 rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
 					<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 						<div className="flex items-center gap-3">
 							<div className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-black bg-[#FFF129] shadow-[2px_2px_0_#000000]">
@@ -122,14 +134,14 @@ export function GeladeiraAdminPage() {
 						<div className="flex items-center gap-2">
 							<Link
 								to="/geladeira/stats"
-								className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+								className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 							>
 								<NotePencilIcon className="h-5 w-5" weight="bold" />
 								Stats
 							</Link>
 							<Link
 								to="/geladeira"
-								className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+								className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 							>
 								<StorefrontIcon className="h-5 w-5" weight="bold" />
 								Shop
@@ -138,7 +150,7 @@ export function GeladeiraAdminPage() {
 								<input type="hidden" name="intent" value="logout" />
 								<button
 									type="submit"
-									className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+									className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 								>
 									<SignOutIcon className="h-5 w-5" weight="bold" />
 									Sair
@@ -173,7 +185,7 @@ export function GeladeiraAdminPage() {
 					</div>
 				</div>
 
-				<div className="w-full max-w-[700px] rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
+				<div className="w-full max-w-175 rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
 					<div className="flex items-center justify-between">
 						<div>
 							<p className="text-xl font-bold leading-7">Seu Pix</p>
@@ -184,7 +196,7 @@ export function GeladeiraAdminPage() {
 						<button
 							type="button"
 							onClick={() => void copyPixKey()}
-							className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+							className="flex h-11 items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 						>
 							<CopyIcon className="h-5 w-5" weight="bold" />
 							Copiar
@@ -203,7 +215,7 @@ export function GeladeiraAdminPage() {
 									<input type="hidden" name="intent" value="pixQrDelete" />
 									<button
 										type="submit"
-										className="flex h-10 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+										className="flex h-10 items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 									>
 										<TrashIcon className="h-5 w-5" weight="bold" />
 										Remover
@@ -219,7 +231,7 @@ export function GeladeiraAdminPage() {
 										data.user.pixQrVersion ?? "0",
 									)}`}
 									alt="QR Code Pix"
-									className="h-[220px] w-[220px] object-contain"
+									className="h-55 w-55 object-contain"
 								/>
 							</div>
 						) : (
@@ -234,7 +246,7 @@ export function GeladeiraAdminPage() {
 							className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center"
 						>
 							<input type="hidden" name="intent" value="pixQrUpload" />
-							<label className="flex h-[56px] w-full items-center gap-3 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] sm:flex-1">
+							<label className="flex h-14 w-full items-center gap-3 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] sm:flex-1">
 								<CameraIcon className="h-5 w-5" weight="bold" />
 								<input
 									name="pixQr"
@@ -245,7 +257,7 @@ export function GeladeiraAdminPage() {
 							</label>
 							<button
 								type="submit"
-								className="flex h-[56px] w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] px-4 text-lg font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px] sm:w-auto"
+								className="flex h-14 w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] px-4 text-lg font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px sm:w-auto"
 							>
 								<PlusIcon className="h-6 w-6" weight="bold" />
 								Enviar QR
@@ -254,7 +266,7 @@ export function GeladeiraAdminPage() {
 					</div>
 				</div>
 
-				<div className="w-full max-w-[700px] rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
+				<div className="w-full max-w-175 rounded-lg border-2 border-black bg-white p-4 font-mono text-black shadow-[4px_4px_0_#000000] sm:p-6">
 					<p className="text-xl font-bold leading-7">Adicionar item</p>
 					<Form method="post" encType="multipart/form-data" className="mt-4 flex flex-col gap-4">
 						<input type="hidden" name="intent" value="add" />
@@ -266,7 +278,7 @@ export function GeladeiraAdminPage() {
 								name="name"
 								type="text"
 								placeholder="Ex: Coca 2L"
-								className="h-[56px] w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
+								className="h-14 w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
 							/>
 						</label>
 
@@ -278,13 +290,13 @@ export function GeladeiraAdminPage() {
 									type="number"
 									min={1}
 									defaultValue={1}
-									className="h-[56px] w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
+									className="h-14 w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
 								/>
 							</label>
 
 							<label className="flex flex-col gap-2">
 								<span className="text-sm font-bold">Foto (opcional)</span>
-								<div className="flex h-[56px] items-center gap-3 rounded-lg border-2 border-black bg-white px-4 shadow-[2px_2px_0_#000000]">
+								<div className="flex h-14 items-center gap-3 rounded-lg border-2 border-black bg-white px-4 shadow-[2px_2px_0_#000000]">
 									<CameraIcon className="h-5 w-5" weight="bold" />
 									<input
 										name="image"
@@ -319,14 +331,14 @@ export function GeladeiraAdminPage() {
 									min={0}
 									step={0.01}
 									placeholder="Ex: 5.00"
-									className="h-[56px] w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
+									className="h-14 w-full rounded-lg border-2 border-black bg-white px-4 text-lg font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
 								/>
 							</label>
 						)}
 
 						<button
 							type="submit"
-							className="flex h-[56px] w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] text-lg font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
+							className="flex h-14 w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] text-lg font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px"
 						>
 							<PlusIcon className="h-6 w-6" weight="bold" />
 							Adicionar
@@ -334,7 +346,7 @@ export function GeladeiraAdminPage() {
 					</Form>
 				</div>
 
-				<div className="w-full max-w-[700px] overflow-hidden rounded-lg border-2 border-black bg-white font-mono text-black shadow-[4px_4px_0_#000000]">
+				<div className="w-full max-w-175 overflow-hidden rounded-lg border-2 border-black bg-white font-mono text-black shadow-[4px_4px_0_#000000]">
 					<div className="flex items-center justify-between border-b-2 border-black px-4 py-3 sm:px-6">
 						<p className="text-xl font-bold leading-7">Seus itens</p>
 						<p className="text-sm text-black/70">{data.items.length}</p>
@@ -345,94 +357,75 @@ export function GeladeiraAdminPage() {
 							Sem itens ainda. Começa adicionando ali em cima.
 						</div>
 					) : (
-						<div className="flex flex-col">
-							{data.items.map((item) => (
-								<div
-									key={item.id}
-									className="flex flex-col gap-4 border-b-2 border-black px-4 py-4 sm:flex-row sm:items-center sm:px-6"
-								>
-									<div className="flex items-center gap-4">
-										<div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-black bg-white shadow-[2px_2px_0_#000000]">
-											{item.hasImage ? (
-												<img
-													src={`/api/geladeira/item-image/${item.id}`}
-													alt={item.name}
-													className="h-full w-full object-cover"
-													loading="lazy"
-												/>
-											) : (
-												<QrCodeIcon className="h-7 w-7 text-black/70" />
-											)}
-										</div>
-										<div className="min-w-0">
-											<p className="truncate text-lg font-bold leading-7">{item.name}</p>
-											<p className="text-sm leading-5 text-black/70">
-												{item.forSale && item.priceCents != null
-													? `À venda: ${formatMoney(item.priceCents)}`
-													: "Não está à venda"}
-											</p>
-										</div>
-									</div>
-
-									<Form
-										method="post"
-										encType="multipart/form-data"
-										className="grid flex-1 grid-cols-2 gap-3 sm:grid-cols-4"
+						<>
+							<ul className="flex flex-col">
+								{data.items.map((item) => (
+									<li
+										key={item.id}
+										className="flex flex-col gap-4 border-b-2 border-black px-4 py-4 sm:flex-row sm:items-center sm:px-6 sm:justify-between sm:flex-wrap"
 									>
-										<input type="hidden" name="intent" value="update" />
-										<input type="hidden" name="itemId" value={item.id} />
-										<input type="hidden" name="fridgeId" value={data.selectedFridgeId} />
-
-										<input
-											name="quantity"
-											type="number"
-											min={0}
-											defaultValue={item.quantity}
-											className="h-11 w-full rounded-lg border-2 border-black bg-white px-3 font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
-										/>
-										<label className="flex h-11 items-center justify-between gap-2 rounded-lg border-2 border-black bg-white px-3 font-bold shadow-[2px_2px_0_#000000]">
-											<span className="text-sm">Venda</span>
-											<input
-												name="forSale"
-												type="checkbox"
-												defaultChecked={item.forSale}
-												className="h-4 w-4"
-											/>
-										</label>
-										<input
-											name="price"
-											type="number"
-											min={0}
-											step={0.01}
-											defaultValue={
-												item.priceCents == null ? "" : (item.priceCents / 100).toFixed(2)
-											}
-											placeholder="R$"
-											className="h-11 w-full rounded-lg border-2 border-black bg-white px-3 font-bold shadow-[2px_2px_0_#000000] focus:outline-none"
-										/>
-										<button
-											type="submit"
-											className="flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FFF129] px-3 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px]"
-										>
-											<NotePencilIcon className="h-5 w-5" weight="bold" />
-											Salvar
-										</button>
-									</Form>
-
-									<Form method="post" className="sm:ml-auto">
-										<input type="hidden" name="intent" value="delete" />
-										<input type="hidden" name="itemId" value={item.id} />
-										<button
-											type="submit"
-											className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-white px-4 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-[1px] hover:-translate-y-[1px] sm:mt-0 sm:w-auto"
-										>
-											<TrashIcon className="h-5 w-5" weight="bold" />
-											Remover
-										</button>
-									</Form>
-								</div>
-							))}
-						</div>
+										<div className="flex items-center gap-4">
+											<div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-black bg-white shadow-[2px_2px_0_#000000]">
+												{item.hasImage ? (
+													<img
+														src={`/api/geladeira/item-image/${item.id}`}
+														alt={item.name}
+														className="h-full w-full object-cover"
+														loading="lazy"
+													/>
+												) : (
+													<QrCodeIcon className="h-7 w-7 text-black/70" />
+												)}
+											</div>
+											<div>
+												<p className="text-left truncate text-lg font-bold leading-7">{item.name}</p>
+												<p className="text-left text-sm leading-5 text-black/70">
+													{item.forSale && item.priceCents != null
+														? `À venda: ${formatMoney(item.priceCents)}`
+														: "Não está à venda"}
+												</p>
+												<p className="text-left text-sm leading-5 text-black/70">Qtd: {item.quantity}</p>
+											</div>
+										</div>
+										<div className="flex flex-row gap-3">
+											<button
+												type="button"
+												className="inline-flex items-center justify-center rounded-lg border-2 border-black bg-[#FFF129] p-3 shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px w-12 h-12"
+												onClick={() =>
+													setEditingItem({
+														id: item.id,
+														name: item.name,
+														quantity: item.quantity,
+														forSale: item.forSale,
+														priceCents: item.priceCents,
+													})
+												}
+											>
+												<PencilIcon className="h-5 w-5" weight="bold" />
+											</button>
+											<Form method="post" className="sm:ml-auto">
+												<input type="hidden" name="intent" value="delete" />
+												<input type="hidden" name="itemId" value={item.id} />
+													<button
+														type="submit"
+														className="inline-flex items-center justify-center mt-1 rounded-lg border-2 border-black bg-white p-3 font-bold shadow-[2px_2px_0_#000000] transition-transform hover:-translate-x-px hover:-translate-y-px sm:mt-0 w-12 h-12"
+													>
+													<TrashIcon className="h-5 w-5" weight="bold" />
+												</button>
+											</Form>
+										</div>
+									</li>
+								))}
+							</ul>
+							{editingItem && (
+								<GeladeiraEditModal
+									open
+									fridgeId={data.selectedFridgeId}
+									item={editingItem}
+									onClose={() => setEditingItem(null)}
+								/>
+							)}
+						</>
 					)}
 				</div>
 			</div>
