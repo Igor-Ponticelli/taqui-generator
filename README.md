@@ -14,6 +14,9 @@ O **Táqui Generator** é uma aplicação web construída com **React Router (fr
 - `/generator`: Gerador oficial de imagens Táqui.
 - `/ip`: Página que mostra seu IP público e gera a arte Táqui com ele.
 - `/link`: Encurtador simples que usa o backend existente.
+- `/textao`: Contador de caracteres/palavras/linhas.
+- `/roleta`: Roleta com edição de lista e SFX.
+- `/geladeira`: Shop/controle de itens da geladeira.
 
 ### Estrutura para compartilhamento
 
@@ -48,6 +51,14 @@ O **Táqui Generator** é uma aplicação web construída com **React Router (fr
 bun run build
 bun run start
 ```
+
+## Geladeira (config no servidor)
+
+- Crie `config/geladeira.json` no servidor (base: `config/geladeira.example.json`).
+- Defina `GELADEIRA_CONFIG_PATH` se o arquivo não estiver no caminho padrão.
+- Defina `SESSION_SECRET` em produção (cookie de login).
+- Em produção com HTTPS, defina `GELADEIRA_COOKIE_SECURE=true`.
+- Os dados (DB, imagens, qrcodes) ficam em `data/geladeira/` por padrão e estão no `.gitignore`.
 
 ## Contribuindo
 

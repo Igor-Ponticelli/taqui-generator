@@ -11,6 +11,7 @@ import {
 	TicketIcon,
 	ArrowsClockwiseIcon,
 	TextAaIcon,
+	SnowflakeIcon,
 } from "@phosphor-icons/react";
 import type { MetaFunction } from "react-router";
 import { PageShell } from "../../components/PageShell";
@@ -30,7 +31,8 @@ type HubCardProps = {
 	| "ticket"
 	| "hash"
 	| "roleta"
-	| "textao";
+	| "textao"
+	| "geladeira";
 };
 
 type HubStatProps = {
@@ -111,6 +113,14 @@ const hubCards: HubCardProps[] = [
 		href: "/textao",
 		badge: "Novo",
 		icon: "textao",
+	},
+	{
+		title: "Táqui Tua Geladeira",
+		description:
+			"Controle itens por pessoa, marque o que tá à venda e retire pelo shop com Pix e QR code.",
+		href: "/geladeira",
+		badge: "Beta",
+		icon: "geladeira",
 	},
 ];
 
@@ -197,6 +207,8 @@ function HubCardIcon({ kind }: { kind: HubCardProps["icon"] }) {
 			return <ArrowsClockwiseIcon className={className} />;
 		case "textao":
 			return <TextAaIcon className={className} />;
+		case "geladeira":
+			return <SnowflakeIcon className={className} />;
 		default:
 			return null;
 	}
