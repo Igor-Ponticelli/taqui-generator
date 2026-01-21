@@ -32,7 +32,7 @@ export const links: Route.LinksFunction = () => [
 		href: "https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,700&display=swap",
 	},
 ];
-
+// teste
 export function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
